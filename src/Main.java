@@ -8,9 +8,17 @@ public class Main {
 
        g1.print();
 
-        System.out.println("PlayerX");
-        String player = scan.nextLine();
+       while(true) {
 
-        g1.playerSymbol( "1", "PlayerX");
+           System.out.println("PlayerX pick a square!");
+           String player = scan.nextLine();
+
+           g1.playerSymbol(g1.GameTable, player, "PlayerX");
+
+           g1.print();
+
+       }
+
+
     }
 }

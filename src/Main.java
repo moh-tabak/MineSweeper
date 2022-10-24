@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         GameBord board = new GameBord();
@@ -7,5 +9,6 @@ public class Main {
 
         board.print();
         Game.startText();
+
     }
 }

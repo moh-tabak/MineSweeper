@@ -1,6 +1,8 @@
 import java.util.Random;
 
 public class GameBord {
+    private static final int ILLEGAL_MOVE = 0;
+    private static final int NOT_DONE_YET = 1;
     Random rand = new Random();
     private final Square[][] gameTable;
 
@@ -12,6 +14,16 @@ public class GameBord {
             }
         }
     }
+
+    public int move(String row, String column) {
+        if (Square.isUncovered == true || SquareisMineHere == true || Square.numberOfMinesAround == true || Square.Square != ' ') {
+            return ILLEGAL_MOVE;
+        }
+        return NOT_DONE_YET;
+    }/*with this we could declare in Game within the gameplay that a move is not possible. And if the game is finished or not
+    It doesn't work yet, but we could try if this works. Problem still remaining is the Static error I get everywhere. We don't want or need it to
+    be static but it does have to work. Can anybody else look into it?
+    */
 
 
     public Square wantedPosition(String row, String column){ // returns the position selected by the player by typing the wanted row (a-d) and the wanted column (1-5) .

@@ -20,7 +20,8 @@ public class GameBord {
     }
 
     //checks if the user chose right inputs or not,
-    public boolean checkInput(String row, String column){
+    public boolean checkInput
+    (String row, String column){
 
         if (!row.equals("a") && !row.equals("b")&& !row.equals("c") && !row.equals("d")){
             return false;
@@ -59,6 +60,24 @@ public class GameBord {
                 }
             }
         }
+    }
+
+    public int returnRawInInteger(String row){ // returns the wanted row in numbers
+        return row.charAt(0) - 97;
+    }
+
+    public int returnColumnInInteger(String column){ // returns the wanted column in numbers
+        return Integer.parseInt(column)-1;
+    }
+
+    public Square move(String row, String column){ // the player will be able to make a move, the wanted square will be uncovered
+        if(checkInput(row,column)==true) {
+            gameTable[returnRawInInteger(row)][returnColumnInInteger(column)].isUncovered = true;
+        }
+        else{
+            System.out.println("Invalid input");
+        }
+        return gameTable[returnRawInInteger(row)][returnColumnInInteger(column)];
     }
 
     private String printSquare(int row, int column){

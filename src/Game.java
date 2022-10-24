@@ -32,7 +32,7 @@ public class Game {
                 i=0;
             }
             int d=0;
-            if (d==14){
+            if (d==14){// I have written 14 because there is 7 mines. if changed to how many mines the user wants it should be changed to (20 - user input)
                 System.out.println("You won");
                 i=0;
             }

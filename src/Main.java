@@ -9,6 +9,7 @@ public class Main {
 
         board.print();
         Game.startText();
+        Game.gamePlay();
 
     }
 }

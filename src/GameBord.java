@@ -1,8 +1,8 @@
 import java.util.Random;
 
 public class GameBord {
-    private static final int ILLEGAL_MOVE = 0;
-    private static final int NOT_DONE_YET = 1;
+    public static final int ILLEGAL_MOVE = 0;
+    public static final int NOT_DONE_YET = 1;
     Random rand = new Random();
     private final Square[][] gameTable;
 

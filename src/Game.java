@@ -1,15 +1,30 @@
 import java.util.Scanner;
 
 public class Game {
-    static Scanner scan = new Scanner(System.in);
-    static Player player = new Player();
+    Scanner scan = new Scanner(System.in);
+    Player player = new Player();
+    boolean playerTurn = true;
+    int status = GameBord.NOT_DONE_YET;
 
 
-    public static void startText() {
+    public void startText() {
         System.out.println("Welcome to MineSweeper!");
         System.out.println("What is your name?");
         player.setName(scan.nextLine());
         System.out.println("Welcome " + player.getName() + ", type your first move, row and column:");
+
+    }
+
+    public void gamePlay(){
+        while(playerTurn){
+
+            System.out.println("Ok " + player.getName() + ", type your next move, row and column:");
+            player.setName(scan.nextLine());
+            if(Square.isMineHere=true){
+
+            }
+
+        }
 
     }
 

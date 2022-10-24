@@ -13,5 +13,18 @@ public class Game {
 
     }
 
+    //checks if the user chose right inputs or not,
+    public boolean checkInput(String row, String column){
+
+        if (!row.equals("a") && !row.equals("b")&& !row.equals("c") && !row.equals("d")){
+            return false;
+        }
+        else{
+            if (!column.equals("1")&&!column.equals("2")&&!column.equals("3")&&!column.equals("4")&&!column.equals("5")){
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

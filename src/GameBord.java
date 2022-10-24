@@ -15,8 +15,8 @@ public class GameBord {
         }
     }
 
-    public int move(String row, String column) {
-        if (Square.isUncovered == true || SquareisMineHere == true || Square.numberOfMinesAround == true || Square.Square != ' ') {
+    public int move(int row, int column) {
+        if (gameTable[row][column].isUncovered == true ) {
             return ILLEGAL_MOVE;
         }
         return NOT_DONE_YET;
@@ -25,25 +25,12 @@ public class GameBord {
     be static but it does have to work. Can anybody else look into it?
     */
 
-
     public Square wantedPosition(String row, String column){ // returns the position selected by the player by typing the wanted row (a-d) and the wanted column (1-5) .
         int rowInNumbers = row.charAt(0)-97; // converts the column from the letter to number (a-d) to (0-4)
         return(gameTable[rowInNumbers][Integer.parseInt(column)-1]);
     }
 
-    //checks if the user chose right inputs or not,
-    public boolean checkInput(String row, String column){
-
-        if (!row.equals("a") && !row.equals("b")&& !row.equals("c") && !row.equals("d")){
-            return false;
-        }
-        else{
-            if (!column.equals("1")&&!column.equals("2")&&!column.equals("3")&&!column.equals("4")&&!column.equals("5")){
-                return false;
-            }
-        }
-        return true;
-    }
+    //moved checkInput to Game class.
 
     public Square[][] getGameTable() {
         return gameTable;

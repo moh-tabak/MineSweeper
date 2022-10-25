@@ -6,6 +6,7 @@ public class Game {
     static GameBord gamebord = new GameBord();
 
     static int mineCount;
+    static int round = 0;
 
 
     public static void startText() {
@@ -15,7 +16,6 @@ public class Game {
         System.out.println("How many mines do you want? 1-19");
         mineCount = scan.nextInt();  // Ask player how many mines and set it in fillWithMines()
         System.out.println("Welcome " + player.getName() + ". You are playing with " + mineCount + " mines, type your first move, row and column:");
-
     }
 
     public static void gamePlay(){
@@ -25,6 +25,7 @@ public class Game {
         table.print();
         boolean gameEnded = false;
         int questionmarksRemaining = 20;
+        round++;
 
 
         do{
@@ -38,7 +39,7 @@ public class Game {
             table.print();
             if (square.isMineHere==true) {
                 System.out.println("Boom!! there is a bomb");
-                gameEnded=true;
+                gameEnded = playAgain(scan, gameEnded);
             }
             if(square.isUncovered==true){//it's not watertight. If you make a invalid move it still counts instead of ignores the already opened field.
                 questionmarksRemaining--;
@@ -46,12 +47,31 @@ public class Game {
             }
             if (questionmarksRemaining == mineCount){//
                 System.out.println("Yeah, you won!! You found all the mines");
-                gameEnded=true;
+                gameEnded = playAgain(scan, gameEnded);
             }
 
         }while(!gameEnded);
+    }
 
-
+    private static boolean playAgain(Scanner scan, boolean gameEnded) {
+        boolean respons = true;
+        do {// loop to initiate play again
+            System.out.println("1. Entering while loop ");
+            System.out.println("2. Would you like to play again? yes/no ");
+            String play = scan.next();
+            if (play.equals("yes")){
+                System.out.println("1. Scanner input was yes");
+                System.out.println("2. Let's play again");
+                System.out.println("3. Get ready for round number " + round + " !|");
+                respons = false;
+            }else if (play.equals("no")) {
+                System.out.println("1. Scanner input was no");
+                System.out.println("2. Ok, thanks and have a wonderfull day.");
+                gameEnded =true;
+            }
+        } while (respons);
+        System.out.println("Round number: " + round);
+        return gameEnded;
     }
 
 }

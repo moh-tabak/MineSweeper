@@ -21,17 +21,19 @@ public class Game {
 
         ioh.clearScreen();
         System.out.println("Welcome to MineSweeper!");
-        System.out.println("What is your name?");
+        System.out.print("What is your name? > ");
         player.setName(scan.nextLine());
         //TODO: Add error checking
-        System.out.println("How big should the game board be?");
-        table = new GameBord(ioh.getValidInt("Rows: "), ioh.getValidInt("Columns: "));
+        System.out.println("\nHow big should the game board be?");
+        table = new GameBord(ioh.getValidInt("Rows > "), ioh.getValidInt("Columns > "));
 
         limit = table.getGameTable().length * table.getGameTable()[0].length;
 
-        System.out.println("How many mines do you want? 1-" + limit + " (recommended is " + ((limit / 5) + 1) + ")");
+        System.out.print("\nHow many mines do you want? 1-"
+                + limit + " (recommended is " + ((limit / 5) + 1) + ") > ");
         mineCount = inputErrorCatch(limit);  // mineMaxMinLimit and string catch.
-        System.out.println("Welcome " + player.getName() + ". You are playing with " + mineCount + " mines, type your first move, row and column:");
+        System.out.println("\nWelcome " + player.getName() + ". You are playing with " + mineCount + " mines. Press enter to start game!");
+        scan.nextLine(); //Otherwise scanner will mess with me and stop reading.
 
     }
 
@@ -49,7 +51,8 @@ public class Game {
             //TODO: Add input check
             ioh.clearScreen();
             System.out.println(table);
-            System.out.println("Move <col><row>: ");
+            System.out.println("\u23AF".repeat(table.getColumns() * 4 + 6));
+            System.out.print("> ");
             input = scan.nextLine();
             row = Integer.parseInt(input.substring(1)) - 1;
             column = ioh.letterToInt(input.charAt(0));
@@ -88,7 +91,8 @@ public class Game {
 
         while (true) {
             try {
-                mines = Integer.parseInt(scan.nextLine());  // Ask player how many mines and set it in fillWithMines()
+                // Ask player how many mines and set it in fillWithMines()
+                mines = Integer.parseInt(scan.nextLine());
                 if (mines < 1) {
                     System.out.println("You took too few mines! Try again 1-" + limit);
                 } else if (mines > limit) {

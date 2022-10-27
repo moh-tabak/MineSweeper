@@ -26,7 +26,7 @@ public class GameBord {
         this.questionMarksRemaining = row * col;
         for(int r = 0; r < row; r++){
             for(int c = 0; c < col; c++){
-                this.gameTable[r][c] = new Square(r, c);
+                this.gameTable[r][c] = new Square();
             }
         }
         this.rows = row;

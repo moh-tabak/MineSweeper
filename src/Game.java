@@ -8,7 +8,15 @@ public class Game {
     static InputOutputHelper ioh = new InputOutputHelper();
 
 
-    public static void startText() {
+    public void startGame() {
+        String playAgain = null;
+        do {
+            gamePlay();
+            System.out.println("Do you like to play again? yes/no");
+            playAgain = scan.next();
+        } while(playAgain.equals("yes"));
+    }
+    private static void startText() {
         int limit;
 
         ioh.clearScreen();
@@ -27,7 +35,7 @@ public class Game {
 
     }
 
-    public static void gamePlay(){
+    private static void gamePlay(){
         boolean gameEnded = false;
         int row;
         int column;
@@ -41,7 +49,7 @@ public class Game {
             //TODO: Add input check
             ioh.clearScreen();
             System.out.println(table);
-            System.out.println("Move (<col><row>): ");
+            System.out.println("Move <col><row>: ");
             input = scan.nextLine();
             row = Integer.parseInt(input.substring(1)) - 1;
             column = ioh.letterToInt(input.charAt(0));
@@ -75,7 +83,7 @@ public class Game {
         } while (!gameEnded);
     }
 
-    public static int inputErrorCatch(int limit) {// Catch MaxMin-mines/exception, return working mineCount.
+    private static int inputErrorCatch(int limit) {// Catch MaxMin-mines/exception, return working mineCount.
        int mines;
 
         while (true) {

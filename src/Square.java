@@ -5,28 +5,7 @@ public class Square {
 
     private boolean isUncovered;
 
-
-    //Coordinates could be used when passing an individual square between functions.
-    //If we don't find use to it, we should remove it!
-
-    //Vertical coordinate
-    private int row;
-    //Horizontal coordinate.
-    private int column;
-
-
-
     public Square() {
-        row = 0;
-        column = 0;
-        numberOfMinesAround = 0;
-        mine = false;
-        isUncovered = false;
-    }
-
-    public Square(int row, int column) {
-        this.row = row;
-        this.column = column;
         numberOfMinesAround = 0;
         mine = false;
         isUncovered = false;
@@ -35,7 +14,7 @@ public class Square {
     @Override
     public String toString() {
         if (!isUncovered) {
-            return "?";
+            return "\033[32m\u263A\033[0m";
         }
         else {
             if (mine)
@@ -72,21 +51,5 @@ public class Square {
 
     public void setUncovered(boolean uncovered) {
         isUncovered = uncovered;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getColumn() {
-        return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
     }
 }

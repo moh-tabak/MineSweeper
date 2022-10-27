@@ -36,7 +36,7 @@ public class GameBord {
     //checks if the user chose right inputs or not,
     public boolean checkInput(int row, int column) {
         //Out of bound check and if played
-        if (row < 0 || row >= rows || column < 1 || column >= columns || gameTable[row][column].isUncovered()) {
+        if (row < 0 || row >= rows || column < 0 || column >= columns || gameTable[row][column].isUncovered()) {
             return false;
         }
         return true;
@@ -63,7 +63,7 @@ public class GameBord {
             colEnd = column < columns - 1 ? column + 1  : column;
             for (int r = rowStart; r <= rowEnd; r++){
                 for (int c = colStart; c <= colEnd; c++){
-                    gameTable[row][column].incNumberOfMinesAround();
+                    gameTable[r][c].incNumberOfMinesAround();
                 }
             }
         }

@@ -81,8 +81,6 @@ public class Game {
                     System.out.println("Yeah, you won!! You found all the mines");
                     break;
                 }
-
-                System.out.println(table);
             }
         } while (!gameEnded);
     }

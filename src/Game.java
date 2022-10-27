@@ -7,6 +7,9 @@ public class Game {
     static int mineCount;
     static InputOutputHelper ioh = new InputOutputHelper();
 
+    public Game() {
+        startGame();
+    }
 
     public void startGame() {
         String playAgain = null;

@@ -61,7 +61,7 @@ public class Game {
             row = Integer.parseInt(input.substring(1)) - 1;
             column = ioh.letterToInt(input.charAt(0));
 
-            if (table.checkInput(row, column) == false) {
+            if (!table.checkInput(row, column)) {
                 System.out.println("Invalid input");
             }
             else {

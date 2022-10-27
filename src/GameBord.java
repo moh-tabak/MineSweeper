@@ -98,7 +98,7 @@ public class GameBord {
         StringBuilder sb = new StringBuilder();
         sb.append("    ");
         IntStream.range(0, columns).forEach(x -> sb.append(" " + Character.toString(x+65) + "  "));
-        sb.append("\n   \u250C\u2500" + "\u2500\u2500\u252C\u2500".repeat(gameTable[0].length-1));
+        sb.append("\n   \u250C\u2500" + "\u2500\u2500\u252C\u2500".repeat(columns-1));
         sb.append("\u2500\u2500\u2510");
         sb.append("\n");
         for (int i = 0; i < rows; i++) {

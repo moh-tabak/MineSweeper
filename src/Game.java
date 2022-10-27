@@ -62,7 +62,8 @@ public class Game {
             column = ioh.letterToInt(input.charAt(0));
 
             if (!table.checkInput(row, column)) {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input. Try Again!");
+                scan.nextLine();
             }
             else {
                 Square square = table.play(row, column);

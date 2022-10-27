@@ -32,7 +32,8 @@ public class Game {
         System.out.print("\nHow many mines do you want? 1-"
                 + limit + " (recommended is " + ((limit / 5) + 1) + ") > ");
         mineCount = inputErrorCatch(limit);  // mineMaxMinLimit and string catch.
-        System.out.println("\nWelcome " + player.getName() + ". You are playing with " + mineCount + " mines. Press enter to start game!");
+        System.out.println("\nWelcome " + player.getName() + ". You are playing with "
+                + mineCount + " mines. To play type <column><row> for example E5. \nPress enter to start game!");
         scan.nextLine(); //Otherwise scanner will mess with me and stop reading.
 
     }

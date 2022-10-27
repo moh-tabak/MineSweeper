@@ -63,8 +63,7 @@ public class Game {
             }
             else {
                 Square square = table.play(row, column);
-                //countUncovered++; count for how many tiles are uncovered, for winning argument below
-                //System.out.println(" ? uncovered: " + countUncovered);//for developing purposes, comment out if game finished
+
                 if (square.isMine()) {
                     System.out.println("Boom!! there is a bomb");
                     gameEnded = true;

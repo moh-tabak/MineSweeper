@@ -44,15 +44,13 @@ public class GameBord {
 
     public void fillWithMines(int numberOfMines) {
         for (int i = 0; i < numberOfMines; i++) { // setting 7 mines in 7 different squares.
-            int row = rand.nextInt(gameTable.length);
-            int column = rand.nextInt(gameTable[0].length);
-
-            System.out.println(gameTable[row][column].isMine() +  " k");
+            int row = rand.nextInt(rows);
+            int column = rand.nextInt(columns);
 
             while (gameTable[row][column].isMine()) { // to make sure that the square randomly picked has no mine in it,
                 // if there is a mine in the square, just try to find another one with no mine.
-                row = rand.nextInt(gameTable.length);
-                column = rand.nextInt(gameTable.length);
+                row = rand.nextInt(rows);
+                column = rand.nextInt(columns);
             }
             gameTable[row][column].setMine(true);
             //Update neighboring squares

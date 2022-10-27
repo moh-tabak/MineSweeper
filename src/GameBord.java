@@ -1,8 +1,13 @@
 import java.util.Random;
+import java.util.stream.IntStream;
+
+//TODO: Add clear table
 
 public class GameBord {
     Random rand = new Random();
     private final Square[][] gameTable;
+    private int rows;
+    private int columns;
 
     public int questionMarksRemaining = 20;
 
@@ -14,47 +19,44 @@ public class GameBord {
             }
         }
     }
-
-
-    public Square wantedPosition(String row, String column){ // returns the position selected by the player by typing the wanted row (a-d) and the wanted column (1-5) .
-        int rowInNumbers = row.charAt(0)-97; // converts the column from the letter to number (a-d) to (0-4)
-        Square result = gameTable[rowInNumbers][Integer.parseInt(column)-1];
-        result.row = rowInNumbers;
-        result.column = Integer.parseInt(column)-1;
-        return(result);
+    public GameBord(int row, int col) {
+        this.gameTable = new Square[row][col];
+        this.questionMarksRemaining = row * col;
+        for(int r = 0; r < row; r++){
+            for(int c = 0; c < col; c++){
+                this.gameTable[r][c] = new Square(r, c);
+            }
+        }
+        this.rows = row;
+        this.columns = col;
     }
 
     //checks if the user chose right inputs or not,
-    public boolean checkInput(String row, String column){
-
-        if (!row.equals("a") && !row.equals("b")&& !row.equals("c") && !row.equals("d")){
+    public boolean checkInput(int row, int column) {
+        //Out of bound check
+        if (row < 0 || row >= rows || column < 1 || column >= columns) {
             return false;
         }
-        else if (!column.equals("1")&&!column.equals("2")&&!column.equals("3")&&!column.equals("4")&&!column.equals("5")) {
-            return false;
-        }
-        else if (wantedPosition(row, column).isUncovered == true) {
+        //Already played
+        else if (gameTable[row][column].isUncovered()) {
             return false;
         }
         return true;
     }
 
-    public Square[][] getGameTable() {
-        return gameTable;
-    }
+    public void fillWithMines(int numberOfMines) {
+        for (int i = 0; i < numberOfMines; i++) { // setting 7 mines in 7 different squares.
+            int row = rand.nextInt(gameTable.length);
+            int column = rand.nextInt(gameTable[0].length);
 
+            System.out.println(gameTable[row][column].isMine() +  " k");
 
-
-    public void fillWithMines() {
-        for (int i = 0; i < Game.mineCount; i++) { // setting 7 mines in 7 different squares.
-            int row = rand.nextInt(4);
-            int column = rand.nextInt(5);
-            while (gameTable[row][column].isMineHere) { // to make sure that the square randomly picked has no mine in it,
+            while (gameTable[row][column].isMine()) { // to make sure that the square randomly picked has no mine in it,
                 // if there is a mine in the square, just try to find another one with no mine.
-                row = rand.nextInt(4);
-                column = rand.nextInt(5);
+                row = rand.nextInt(gameTable.length);
+                column = rand.nextInt(gameTable.length);
             }
-            gameTable[row][column].isMineHere=true;
+            gameTable[row][column].setMine(true);
             //Update neighboring squares
             int rowStart,colStart,rowEnd,colEnd;
             rowStart = row > 0 ? row - 1 : row;
@@ -63,23 +65,15 @@ public class GameBord {
             colEnd = column < 4 ? column + 1  : column;
             for (int r = rowStart; r <= rowEnd; r++){
                 for (int c = colStart; c <= colEnd; c++){
-                    gameTable[r][c].numberOfMinesAround++;
+                    gameTable[row][column].incNumberOfMinesAround();
                 }
             }
         }
     }
 
-    public Square move(String row, String column){ // the player will be able to make a move, the wanted square will be uncovered
-        if(wantedPosition(row, column).isUncovered == true){//to check if a tile/square is already uncovered, if so, the move would be invalid
-            System.out.println("Invalid input, please try again");
-        }
-        if(checkInput(row,column)==true) {
-            wantedPosition(row, column).isUncovered = true;
-        }
-        else{
-            System.out.println("Invalid input");
-        }
-        return wantedPosition(row,column);
+    public Square play(int row, int column){
+            getSquare(row, column).setUncovered(true);
+            return getSquare(row, column);
     }
 
     public void uncoverAroundZeros(int row, int column){
@@ -90,11 +84,11 @@ public class GameBord {
         colEnd = column < 4 ? column + 1  : column;
         for (int r = rowStart; r <= rowEnd; r++){
             for (int c = colStart; c <= colEnd; c++){
-                if(!gameTable[r][c].isUncovered && !gameTable[r][c].isMineHere){
-                    gameTable[r][c].isUncovered = true;
+                if(!gameTable[r][c].isUncovered() && !gameTable[r][c].isMine()){
+                    gameTable[r][c].setUncovered(true);
                     questionMarksRemaining--;
                     //when a neighbouring square is uncovered and is also a zero, uncover squares around it. (recursion)
-                    if(gameTable[r][c].numberOfMinesAround == 0) {
+                    if(gameTable[r][c].getNumberOfMinesAround() == 0) {
                         uncoverAroundZeros(r,c);
                     }
                 }
@@ -102,49 +96,52 @@ public class GameBord {
         }
     }
 
-    private String printSquare(int row, int column){
-        if(!gameTable[row][column].isUncovered){
-            return " ? ";
+    //TODO: Remove hardcoded padding
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("    ");
+        IntStream.range(0, gameTable[0].length).forEach(x -> sb.append(" " + Character.toString(x+65)));
+        sb.append("\n   \u250C" + "\u2500".repeat(gameTable[0].length * 2 + 1));
+        sb.append("\u2510");
+        sb.append("\n");
+        for(int i = 0; i < gameTable.length; i++) {
+            sb.append(String.format("%1$" + 2 + "s", i + 1));
+            sb.append(" \u2502");
+            for(Square square :  gameTable[i]) {
+                sb.append(" " + (square.isUncovered() ? square.getNumberOfMinesAround() : "?"));
+            }
+            sb.append(" \u2502");
+            sb.append("\n");
         }
-        else {
-            if(gameTable[row][column].isMineHere)
-                return " x ";
-            else
-                return " " + gameTable[row][column].numberOfMinesAround + " ";
-        }
+        sb.append("   \u2514" + "\u2500".repeat(gameTable[0].length*2+1));
+        sb.append("\u2518");
+
+        return sb.toString();
     }
 
-    public void print() {
-        System.out.println("   1   2   3   4   5");
-        System.out.println("a " + printSquare(0,0) + "|" + printSquare(0,1) + "|"+ printSquare(0,2) + "|"+ printSquare(0,3) + "|" + printSquare(0,4));
-        System.out.println("  ---+---+---+---+---");
-        System.out.println("b " + printSquare(1,0) + "|" + printSquare(1,1) + "|"+ printSquare(1,2) + "|"+ printSquare(1,3) + "|" + printSquare(1,4));
-        System.out.println("  ---+---+---+---+---");
-        System.out.println("c " + printSquare(2,0) + "|" + printSquare(2,1) + "|"+ printSquare(2,2) + "|"+ printSquare(2,3) + "|" + printSquare(2,4));
-        System.out.println("  ---+---+---+---+---");
-        System.out.println("d " + printSquare(3,0) + "|" + printSquare(3,1) + "|"+ printSquare(3,2) + "|"+ printSquare(3,3) + "|" + printSquare(3,4));
-        System.out.println();
+    //Geters and seters
+    public int getRows() {
+        return rows;
     }
 
-
-    //For developing
-    public void printRevealed() {
-        System.out.println("   1   2   3   4   5");
-        System.out.println("a " + printSquareRevealed(0,0) + "|" + printSquareRevealed(0,1) + "|"+ printSquareRevealed(0,2) + "|"+ printSquareRevealed(0,3) + "|" + printSquareRevealed(0,4));
-        System.out.println("  ---+---+---+---+---");
-        System.out.println("b " + printSquareRevealed(1,0) + "|" + printSquareRevealed(1,1) + "|"+ printSquareRevealed(1,2) + "|"+ printSquareRevealed(1,3) + "|" + printSquareRevealed(1,4));
-        System.out.println("  ---+---+---+---+---");
-        System.out.println("c " + printSquareRevealed(2,0) + "|" + printSquareRevealed(2,1) + "|"+ printSquareRevealed(2,2) + "|"+ printSquareRevealed(2,3) + "|" + printSquareRevealed(2,4));
-        System.out.println("  ---+---+---+---+---");
-        System.out.println("d " + printSquareRevealed(3,0) + "|" + printSquareRevealed(3,1) + "|"+ printSquareRevealed(3,2) + "|"+ printSquareRevealed(3,3) + "|" + printSquareRevealed(3,4));
-        System.out.println();
+    public int getColumns() {
+        return columns;
     }
 
-    //For developing
-    private String printSquareRevealed(int row, int column){
-        if(gameTable[row][column].isMineHere)
-            return " x ";
-        else
-            return " " + gameTable[row][column].numberOfMinesAround + " ";
+    public Square[][] getGameTable() {
+        return gameTable;
+    }
+
+    public Square getSquare(int row, int column){ // returns the position selected by the player by typing the wanted row (a-d) and the wanted column (1-5) .
+        return gameTable[row][column];
+    }
+
+    public int getQuestionMarksRemaining() {
+        return questionMarksRemaining;
+    }
+
+    public void decrementMarksRemaining() {
+        questionMarksRemaining--;
     }
 }

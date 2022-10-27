@@ -3,76 +3,93 @@ import java.util.Scanner;
 public class Game {
     static Scanner scan = new Scanner(System.in);
     static Player player = new Player();
-    static GameBord table = new GameBord();
+    static GameBord table;
     static int mineCount;
+    static InputOutputHelper ioh = new InputOutputHelper();
 
 
     public static void startText() {
+        int limit;
+
         System.out.println("Welcome to MineSweeper!");
         System.out.println("What is your name?");
         player.setName(scan.nextLine());
-        System.out.println("How many mines do you want? 1-19 (recommended is 4)");
-        int minesMaxMin = inputErrorCatch();  // mineMaxMinLimit and string catch.
+        //TODO: Add error checking
+        System.out.println("How big should the game board be (row<space>col)");
+        table = new GameBord(ioh.getValidInt("Rows: "), ioh.getValidInt("Columns: "));
+
+        limit = table.getGameTable().length * table.getGameTable()[0].length;
+
+        System.out.println("How many mines do you want? 1-" + limit + " (recommended is " + ((limit / 5) + 1) + ")");
+        mineCount = inputErrorCatch(limit);  // mineMaxMinLimit and string catch.
         System.out.println("Welcome " + player.getName() + ". You are playing with " + mineCount + " mines, type your first move, row and column:");
 
     }
 
     public static void gamePlay(){
-        table= new GameBord();
-        table.fillWithMines();
-        table.printRevealed(); //for development only
-        table.print();
         boolean gameEnded = false;
-        do{
-            System.out.println("row: ");
-            String row= scan.next();
-            System.out.println("column: ");
-            String column = scan.next();
-            if (table.checkInput(row, column)==false) {
+        int row;
+        int column;
+        String input;
+
+        startText();
+        table.fillWithMines(mineCount);
+        System.out.println(table);
+
+        do {
+            //TODO: Doing, add input check
+            System.out.println("Move (<col><row>): ");
+            input = scan.nextLine();
+            row = Integer.parseInt(input.substring(1)) - 1;
+            column = ioh.letterToInt(input.charAt(0));
+
+            if (table.checkInput(row, column) == false) {
                 System.out.println("Invalid input");
             }
             else {
-                Square square = table.move(row, column);
+                Square square = table.play(row, column);
                 //countUncovered++; count for how many tiles are uncovered, for winning argument below
                 //System.out.println(" ? uncovered: " + countUncovered);//for developing purposes, comment out if game finished
-                if (square.isMineHere) {
+                if (square.isMine()) {
                     System.out.println("Boom!! there is a bomb");
                     gameEnded = true;
                 }
-                if (square.isUncovered) {//it's not watertight. If you make an invalid move it still counts instead of ignores the already opened field.
-                    table.questionMarksRemaining--;
-                    System.out.println("Question marks remaining: " + table.questionMarksRemaining);
+                else {
+                    table.decrementMarksRemaining();
+                    System.out.println("Question marks remaining: " + table.getQuestionMarksRemaining());
 
-                    if (square.numberOfMinesAround == 0) {
-                        table.uncoverAroundZeros(square.row, square.column);
+                    if (square.getNumberOfMinesAround() == 0) {
+                        table.uncoverAroundZeros(row, column);
                     }
                 }
-                if (table.questionMarksRemaining == mineCount) {//
+                if (table.questionMarksRemaining == mineCount) {
                     System.out.println("Yeah, you won!! You found all the mines");
                     break;
                 }
 
-                table.print();
+                System.out.println(table);
             }
-        }while(!gameEnded);
+        } while (!gameEnded);
     }
 
-    public static int inputErrorCatch() {  // Catch MaxMin-mines/exception, return working mineCount.
+    public static int inputErrorCatch(int limit) {// Catch MaxMin-mines/exception, return working mineCount.
+       int mines;
+
         while (true) {
             try {
-                mineCount = scan.nextInt();  // Ask player how many mines and set it in fillWithMines()
-                if (mineCount < 1) {
-                    System.out.println("You took too few mines! Try again 1-19");
-                } else if (mineCount > 19) {
-                    System.out.println("You took too many mines! Try again 1-19");
+                mines = Integer.parseInt(scan.nextLine());  // Ask player how many mines and set it in fillWithMines()
+                if (mines < 1) {
+                    System.out.println("You took too few mines! Try again 1-" + limit);
+                } else if (mines > limit) {
+                    System.out.println("You took too many mines! Try again 1-" + limit);
                 } else {
                     break;
                 }
             }catch(Exception e){
-                System.out.println("Error! Try again 1-19.");
+                System.out.println("Error! Try again 1-" + limit + "!");
                 scan.nextLine();
             }
         }
-        return mineCount;
+        return mines;
     }
 }

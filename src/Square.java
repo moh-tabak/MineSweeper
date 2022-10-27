@@ -41,7 +41,7 @@ public class Square {
             if (mine)
                 return "x";
             else
-                return String.valueOf(numberOfMinesAround);
+                return numberOfMinesAround > 0 ? String.valueOf(numberOfMinesAround) : " ";
         }
     }
 

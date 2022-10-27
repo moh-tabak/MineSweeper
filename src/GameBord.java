@@ -4,12 +4,12 @@ import java.util.stream.IntStream;
 //TODO: Add clear table
 
 public class GameBord {
-    Random rand = new Random();
+    private Random rand = new Random();
     private final Square[][] gameTable;
     private int rows;
     private int columns;
 
-    public int questionMarksRemaining = 20;
+    private int questionMarksRemaining = 20;
 
     public GameBord() {
         this.gameTable  = new Square[4][5];
@@ -18,6 +18,8 @@ public class GameBord {
                 this.gameTable[row][column] = new Square();
             }
         }
+        this.rows = 4;
+        this.columns = 5;
     }
     public GameBord(int row, int col) {
         this.gameTable = new Square[row][col];
@@ -33,12 +35,8 @@ public class GameBord {
 
     //checks if the user chose right inputs or not,
     public boolean checkInput(int row, int column) {
-        //Out of bound check
-        if (row < 0 || row >= rows || column < 1 || column >= columns) {
-            return false;
-        }
-        //Already played
-        else if (gameTable[row][column].isUncovered()) {
+        //Out of bound check and if played
+        if (row < 0 || row >= rows || column < 1 || column >= columns || gameTable[row][column].isUncovered()) {
             return false;
         }
         return true;
@@ -60,9 +58,9 @@ public class GameBord {
             //Update neighboring squares
             int rowStart,colStart,rowEnd,colEnd;
             rowStart = row > 0 ? row - 1 : row;
-            rowEnd = row < 3 ? row + 1 : row;
+            rowEnd = row < rows - 1 ? row + 1 : row;
             colStart = column > 0 ? column - 1 : column;
-            colEnd = column < 4 ? column + 1  : column;
+            colEnd = column < columns - 1 ? column + 1  : column;
             for (int r = rowStart; r <= rowEnd; r++){
                 for (int c = colStart; c <= colEnd; c++){
                     gameTable[row][column].incNumberOfMinesAround();
@@ -96,26 +94,32 @@ public class GameBord {
         }
     }
 
-    //TODO: Remove hardcoded padding
+    //TODO: Remove hardcoded padding? Does not work for col == 1 or row == 1
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("    ");
-        IntStream.range(0, gameTable[0].length).forEach(x -> sb.append(" " + Character.toString(x+65)));
-        sb.append("\n   \u250C" + "\u2500".repeat(gameTable[0].length * 2 + 1));
-        sb.append("\u2510");
+        IntStream.range(0, columns).forEach(x -> sb.append(" " + Character.toString(x+65) + "  "));
+        sb.append("\n   \u250C\u2500" + "\u2500\u2500\u252C\u2500".repeat(gameTable[0].length-1));
+        sb.append("\u2500\u2500\u2510");
         sb.append("\n");
-        for(int i = 0; i < gameTable.length; i++) {
+        for (int i = 0; i < rows; i++) {
             sb.append(String.format("%1$" + 2 + "s", i + 1));
-            sb.append(" \u2502");
-            for(Square square :  gameTable[i]) {
-                sb.append(" " + (square.isUncovered() ? square.getNumberOfMinesAround() : "?"));
+            sb.append(" ");
+            for (Square square :  gameTable[i]) {
+                sb.append("\u2502 " + square + " ");
             }
-            sb.append(" \u2502");
+            sb.append("\u2502");
             sb.append("\n");
+            if (i != rows - 1) {
+                sb.append("   \u251c");
+                sb.append("\u2500\u2500\u2500\u253C".repeat(columns-1));
+                sb.append("\u2500".repeat(3) + "\u2524");
+                sb.append("\n");
+            }
         }
-        sb.append("   \u2514" + "\u2500".repeat(gameTable[0].length*2+1));
-        sb.append("\u2518");
+        sb.append("   \u2514\u2500" + "\u2500\u2500\u2534\u2500".repeat(columns-1));
+        sb.append("\u2500\u2500\u2518");
 
         return sb.toString();
     }

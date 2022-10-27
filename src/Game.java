@@ -11,11 +11,12 @@ public class Game {
     public static void startText() {
         int limit;
 
+        ioh.clearScreen();
         System.out.println("Welcome to MineSweeper!");
         System.out.println("What is your name?");
         player.setName(scan.nextLine());
         //TODO: Add error checking
-        System.out.println("How big should the game board be (row<space>col)");
+        System.out.println("How big should the game board be?");
         table = new GameBord(ioh.getValidInt("Rows: "), ioh.getValidInt("Columns: "));
 
         limit = table.getGameTable().length * table.getGameTable()[0].length;
@@ -37,7 +38,9 @@ public class Game {
         System.out.println(table);
 
         do {
-            //TODO: Doing, add input check
+            //TODO: Add input check
+            ioh.clearScreen();
+            System.out.println(table);
             System.out.println("Move (<col><row>): ");
             input = scan.nextLine();
             row = Integer.parseInt(input.substring(1)) - 1;
@@ -62,7 +65,7 @@ public class Game {
                         table.uncoverAroundZeros(row, column);
                     }
                 }
-                if (table.questionMarksRemaining == mineCount) {
+                if (table.getQuestionMarksRemaining() == mineCount) {
                     System.out.println("Yeah, you won!! You found all the mines");
                     break;
                 }

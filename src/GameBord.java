@@ -36,10 +36,13 @@ public class GameBord {
     //checks if the user chose right inputs or not,
     public boolean checkInput(int row, int column) {
         //Out of bound check and if played
+        return row < 0 && row >= rows && column < 0 && column >= columns && gameTable[row][column].isUncovered();
+        /*
         if (row < 0 || row >= rows || column < 0 || column >= columns || gameTable[row][column].isUncovered()) {
             return false;
         }
         return true;
+        */
     }
 
     public void fillWithMines(int numberOfMines) {

@@ -15,7 +15,7 @@ public class Game {
         String playAgain = null;
         do {
             gamePlay();
-            System.out.println("Do you like to play again? yes/no");
+            System.out.println("Would you like to play again? yes/no");
             playAgain = scan.next();
         } while(playAgain.equals("yes"));
     }
@@ -102,7 +102,7 @@ public class Game {
                 } else {
                     break;
                 }
-            }catch(Exception e){
+            } catch(Exception e){
                 System.out.println("Error! Try again 1-" + limit + "!");
                 scan.nextLine();
             }
